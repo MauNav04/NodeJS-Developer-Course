@@ -1,16 +1,45 @@
 //const notes = require('./notes');
 const chalk = require('chalk');
 const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
+//const { hideBin } = require('yargs/helpers')
 
 //notes('Your vote');
 
-//console.log(yargs.argv);
+var argv = yargs(process.argv.slice(2))
+    //Create an "add" command
+    //.usage('Usage: $0 <command> [options]')
+    .command('add', '[Add new note]', function (yargs) {
+        return yargs.options({
+            'title': {
+                describe: 'Note Title',
+                demandOption: true,
+                type: 'string',
+                string: true
+            },
+            'body': {
+                describe: 'Note Body',
+                demandOption: true,
+                type: 'string',
+                string: true
+            }
 
-//Create an "add" command
-// require('yargs/yargs')(process.argv.slice(2))
-//     .command('add', 'Add a new note', () => { }, console.log('Adding a new note'))
-//     .argv
+        })
+    }, function (yargs) {
+        console.log('Title: ' + yargs.title + '\n' + 'Body: ' + yargs.body)
+    })
+    //Create an "remove" command
+    .command('remove', '[Remove a note from your file]', function (yargs) {
+        console.log('Removing the note')
+    })
+    //Create an "read" command
+    .command('read', '[Read a given note]', function (yargs) {
+        console.log('Opening the note...')
+    })
+    //Create an "list" command
+    .command('list', '[List all the notes in your file]', function (yargs) {
+        console.log('Listing notes...')
+    })
+    .parse();
 
 
 // yargs.command({
@@ -41,6 +70,9 @@ const { hideBin } = require('yargs/helpers')
 //         console.log('Opening the note')
 //     }
 // })
+
+//checkCommands(yargs, argv, 1);
+
 
 console.log(yargs(process.argv.slice(2)).argv)
 
