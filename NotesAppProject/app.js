@@ -1,4 +1,4 @@
-//const notes = require('./notes');
+const notes = require('./notes.js');
 const chalk = require('chalk');
 const yargs = require('yargs/yargs')
 //const { hideBin } = require('yargs/helpers')
@@ -25,7 +25,7 @@ var argv = yargs(process.argv.slice(2))
 
         })
     }, function (yargs) {
-        console.log('Title: ' + yargs.title + '\n' + 'Body: ' + yargs.body)
+        notes.addNotes(yargs.title, yargs.body)
     })
     //Create an "remove" command
     .command('remove', '[Remove a note from your file]', function (yargs) {
