@@ -11,7 +11,7 @@ var argv = yargs(process.argv.slice(2))
     .command('add', '[Add new note]', function (yargs) {
         return yargs.options({
             'title': {
-                describe: 'Note Title',
+                describe: 'Title for the note to be added',
                 demandOption: true,
                 type: 'string',
                 string: true
@@ -29,7 +29,15 @@ var argv = yargs(process.argv.slice(2))
     })
     //Create an "remove" command
     .command('remove', '[Remove a note from your file]', function (yargs) {
-        console.log('Removing the note')
+        return yargs.option(
+            'title', {
+            describe: 'Title of the note that will be removed',
+            demandOption: true,
+            type: 'string',
+            string: true
+        })
+    }, function (yargs) {
+        notes.removeNotes(yargs.title)
     })
     //Create an "read" command
     .command('read', '[Read a given note]', function (yargs) {
