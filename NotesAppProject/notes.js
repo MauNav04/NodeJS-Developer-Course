@@ -1,8 +1,5 @@
 const chalk = require('chalk')
 const fs = require('fs');
-const { required } = require('yargs');
-
-const getNotes = note => console.log(note)
 
 const addNotes = (title, body) => {
     const notes = loadNotes(title, body);
@@ -69,7 +66,6 @@ const listNotes = () => {
 const readNote = (title) => {
     const notes = loadNotes()
     const Note = notes.find(note => note.title === title)
-    console.log(Note)
     if (Note) {
         console.log(chalk.blue.inverse('Title: ' + Note.title))
         console.log('Note: ' + Note.body)
@@ -77,11 +73,6 @@ const readNote = (title) => {
         console.log(chalk.red.inverse('There is no note with the name ' + title))
     }
 }
-
-// const findNote = (notes, title) => {
-//     const a = notes.find(note => note.title === title)
-//     return a
-// }
 
 const saveNotes = notes => {
     const dataJSON = JSON.stringify(notes);
@@ -98,9 +89,7 @@ const loadNotes = () => {
     }
 }
 
-
 module.exports = {
-    getNotes: getNotes,
     addNotes: addNotes,
     removeNotes: removeNotes,
     listNotes: listNotes,
