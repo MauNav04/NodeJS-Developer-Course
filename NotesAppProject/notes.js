@@ -1,14 +1,12 @@
+const chalk = require('chalk')
 const fs = require('fs');
+const { required } = require('yargs');
 
-const getNotes = function (note) {
-    console.log(note);
-}
+const getNotes = note => console.log(note)
 
-const addNotes = function (title, body) {
+const addNotes = (title, body) => {
     const notes = loadNotes(title, body);
-    const duplicateNotes = notes.filter(function (note) {
-        return note.title === title;
-    })
+    const duplicateNotes = notes.filter(note => note.title === title)
 
     if (duplicateNotes.length === 0) {
         notes.push({
@@ -16,38 +14,53 @@ const addNotes = function (title, body) {
             body: body
         })
         saveNotes(notes)
-        console.log('Note has been added !')
+        console.log(chalk.green.inverse('Note has been added !'))
     }
     else {
-        console.log('The title is already in use')
+        console.log(chalk.red.inverse('The title is already in use'))
     }
 }
 
-const removeNotes = function (title) {
+const removeNotes = title => {
     try {
         const dataBuffer = fs.readFileSync('notes.json')
         const dataJSON = JSON.parse(dataBuffer)
-        if (dataJSON.includes(title)) {
-            let arrPiece1 = dataJSON.slice(0, indexOf(title))
-            let arrPiece2 = dataJSON.slice(indexOf(title))
+        let foundFlag = false;
+        for (let index = 0; index < dataJSON.length; index++) {
+            const element = dataJSON[index];
+            if (element.title === title) {
+                let arrPiece1 = dataJSON.slice(0, index)
+                let arrPiece2 = dataJSON.slice(index)
 
-            arrPiece2.shift()
-            const finalArr = arrPiece1.concat(arrPiece2)
+                arrPiece2.shift()
+                const finalArr = arrPiece1.concat(arrPiece2)
 
-            console.log(finalArr)
+                const newNotesJSON = JSON.stringify(finalArr);
+                fs.writeFileSync('notes.json', newNotesJSON);
+
+                foundFlag = true;
+                console.log(chalk.bgGreen('Note removed!'));
+                break
+            }
+        }
+        if (foundFlag === false) {
+            console.log("The note \"" + title + "\" is not in the file");
+            console.log(chalk.bgRed('No note found!'));
+        } else {
+            foundFlag = false;
         }
 
     } catch (e) {
-        console.log('There are no noter in the file yet !!')
+        console.log('There are no notes in the file yet !!')
     }
 }
 
-const saveNotes = function (notes) {
+const saveNotes = notes => {
     const dataJSON = JSON.stringify(notes);
     fs.writeFileSync('notes.json', dataJSON)
 }
 
-const loadNotes = function (title, body) {
+const loadNotes = () => {
     try {
         const dataBuffer = fs.readFileSync('notes.json')
         const dataJSON = JSON.parse(dataBuffer)
