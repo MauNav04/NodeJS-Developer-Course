@@ -39,11 +39,19 @@ var argv = yargs(process.argv.slice(2))
     })
     //Create an "read" command
     .command('read', '[Read a given note]', yargs => {
-        console.log('Opening the note...')
+        return yargs.option(
+            'title', {
+            describe: 'Title of the note you want to read',
+            demandOption: true,
+            type: 'string',
+            string: true
+        })
+    }, yargs => {
+        notes.readNote(yargs.title)
     })
     //Create an "list" command
-    .command('list', '[List all the notes in your file]', yargs => {
-        console.log('Listing notes...')
+    .command('list', '[List all the notes in your file]', () => {
+        notes.listNotes()
     })
     .parse();
 
